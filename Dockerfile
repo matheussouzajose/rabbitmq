@@ -4,3 +4,4 @@ FROM rabbitmq:4.1-management-alpine
 #   mv rabbitmq_delayed_message_exchange-3.8.17.8f537ac.ez /opt/rabbitmq/plugins/rabbitmq_delayed_message_exchange.ez
 
 # RUN rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+EXPOSE 15672 5672
