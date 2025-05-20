@@ -1,22 +1,33 @@
+version: '3.8'
+
 services:
+  # Serviço principal do RabbitMQ com plugin delayed message
   rabbitmq:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: rabbitmq.Dockerfile
     container_name: rabbitmq
-    ports:
-      - "5672:5672"     # Porta AMQP
-      - "15672:15672"   # Porta da UI (management)
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
+    hostname: rabbitmq
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_logs:/var/log/rabbitmq
+    ports:
+      - "5672:5672"    # AMQP protocol
+      - "15672:15672"  # Management UI
+      - "15692:15692"  # Prometheus metrics
+      - "25672:25672"  # Distribution for clustering
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test: ["CMD", "rabbitmqctl", "status"]
       interval: 30s
-      timeout: 10s
-      retries: 5
+      timeout: 30s
+      retries: 3
+    restart: unless-stopped
 
 volumes:
   rabbitmq_data:
+    driver: local
+  rabbitmq_logs:
+    driver: local
