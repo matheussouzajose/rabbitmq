@@ -1,2 +1,1 @@
-# rqabbitmq
-# rabbitmq
+

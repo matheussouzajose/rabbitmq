@@ -10,6 +10,5 @@ services:
       RABBITMQ_DEFAULT_PASS: admin
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-
 volumes:
   rabbitmq_data:
